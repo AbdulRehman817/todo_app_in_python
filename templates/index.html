@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do App</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: sans-serif;
+      background: #0f0f13;
+      color: #e0e0e0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 60px 16px;
+    }
+
+    .card {
+      background: #1a1a1f;
+      border: 1px solid #2e2e38;
+      border-radius: 20px;
+      padding: 36px;
+      width: 100%;
+      max-width: 500px;
+      height: fit-content;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 24px;
+    }
+
+    .add-form {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 28px;
+    }
+
+    .add-form input {
+      flex: 1;
+      padding: 10px 14px;
+      background: #111116;
+      border: 1px solid #2e2e38;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .add-form input:focus { border-color: #6b67cc; }
+
+    .add-form button {
+      padding: 10px 18px;
+      background: #6b67cc;
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .add-form button:hover { background: #5a57b5; }
+
+    .task {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-radius: 10px;
+      background: #111116;
+      border: 1px solid #2e2e38;
+      margin-bottom: 10px;
+    }
+
+    .task-left { display: flex; align-items: center; gap: 12px; }
+
+    .task-title {
+      font-size: 14px;
+      color: #d0d0d0;
+    }
+
+    .task-title.done {
+      text-decoration: line-through;
+      color: #555;
+    }
+
+    .task-actions { display: flex; gap: 8px; }
+
+    .btn-done, .btn-delete {
+      font-size: 11px;
+      font-family: monospace;
+      padding: 5px 12px;
+      border-radius: 6px;
+      border: 1px solid;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .btn-done {
+      color: #4caf88;
+      border-color: #1e3d2f;
+      background: transparent;
+    }
+
+    .btn-done:hover { background: #1a2e22; }
+
+    .btn-delete {
+      color: #e06060;
+      border-color: #3d1e1e;
+      background: transparent;
+    }
+
+    .btn-delete:hover { background: #2e1a1a; }
+
+    .empty {
+      text-align: center;
+      color: #444;
+      font-size: 13px;
+      padding: 24px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>My Tasks</h1>
+
+    <form class="add-form" action="/add" method="POST">
+      <input type="text" name="title" placeholder="Add a new task..." autocomplete="off" required>
+      <button type="submit">Add</button>
+    </form>
+
+    {% if tasks %}
+      {% for task in tasks %}
+      <div class="task">
+        <div class="task-left">
+          <span class="task-title {% if task['done'] %}done{% endif %}">
+            {{ task['title'] }}
+          </span>
+        </div>
+        <div class="task-actions">
+          <a class="btn-done" href="/done/{{ task['id'] }}">
+            {% if task['done'] %} Undo {% else %} Done {% endif %}
+          </a>
+          <a class="btn-delete" href="/delete/{{ task['id'] }}">Delete</a>
+        </div>
+      </div>
+      {% endfor %}
+    {% else %}
+      <p class="empty">No tasks yet. Add one above!</p>
+    {% endif %}
+  </div>
+</body>
+</html>
